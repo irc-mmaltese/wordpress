@@ -13,42 +13,52 @@ variable "SHA" {
   type    = string
 }
 
-group "all" {
-  targets = [ "apache", "fpm", "fpm-alpine" ]
+target "build" {
+  name = "build-${app}"
+  matrix = {
+    app = ["apache", "fpm", "fpm-alpine"]
+  }
+  dockerfile = "${app}.Dockerfile"
+  platforms = [ "linux/amd64" ]
+  tags = ["ghcr.io/irc-mmaltese/wordpress:${WP}-php${PHP}-${app}"]
 }
 
-target "apache" {
-    args = {
-      PHP_VERSION = PHP
-      WP_VERSION  = WP
-      WP_SHA      = SHA
-    }
-    dockerfile = "apache.Dockerfile"
-    context    = "."
-    platforms  = [ "linux/amd64" ]
-    tags       = [ "ghcr.io/irc-mmaltese/wordpress:${WP}-php${PHP}-apache" ]
-}
+// group "all" {
+//   targets = [ "apache", "fpm", "fpm-alpine" ]
+// }
 
-target "fpm" {
-    args = {
-      PHP_VERSION = PHP
-      WP_VERSION  = WP
-      WP_SHA      = SHA
-    }
-    dockerfile = "fpm.Dockerfile"
-    context    = "."
-    platforms  = [ "linux/amd64" ]
-    tags       = [ "ghcr.io/irc-mmaltese/wordpress:${WP}-php${PHP}-fpm" ]
-}
+// target "apache" {
+//     args = {
+//       PHP_VERSION = PHP
+//       WP_VERSION  = WP
+//       WP_SHA      = SHA
+//     }
+//     dockerfile = "apache.Dockerfile"
+//     context    = "."
+//     platforms  = [ "linux/amd64" ]
+//     tags       = [ "ghcr.io/irc-mmaltese/wordpress:${WP}-php${PHP}-apache" ]
+// }
 
-target "fpm-alpine" {
-    args = {
-      PHP_VERSION = PHP
-      WP_VERSION  = WP
-      WP_SHA      = SHA
-    }
-    dockerfile = "fpm-alpine.Dockerfile"
-    context    = "."
-    platforms  = [ "linux/amd64" ]
-    tags       = [ "ghcr.io/irc-mmaltese/wordpress:${WP}-php${PHP}-fpm-alpine" ]
-}
+// target "fpm" {
+//     args = {
+//       PHP_VERSION = PHP
+//       WP_VERSION  = WP
+//       WP_SHA      = SHA
+//     }
+//     dockerfile = "fpm.Dockerfile"
+//     context    = "."
+//     platforms  = [ "linux/amd64" ]
+//     tags       = [ "ghcr.io/irc-mmaltese/wordpress:${WP}-php${PHP}-fpm" ]
+// }
+
+// target "fpm-alpine" {
+//     args = {
+//       PHP_VERSION = PHP
+//       WP_VERSION  = WP
+//       WP_SHA      = SHA
+//     }
+//     dockerfile = "fpm-alpine.Dockerfile"
+//     context    = "."
+//     platforms  = [ "linux/amd64" ]
+//     tags       = [ "ghcr.io/irc-mmaltese/wordpress:${WP}-php${PHP}-fpm-alpine" ]
+// }
