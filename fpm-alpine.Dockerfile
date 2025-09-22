@@ -1,10 +1,8 @@
-#
-# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
-#
-# PLEASE DO NOT EDIT IT DIRECTLY.
-#
+ARG PHP_VERSION
+ARG WP_VERSION
+ARG WP_SHA
 
-FROM php:8.2-fpm-alpine
+FROM php:${PHP_VERSION}-fpm-alpine
 
 # persistent dependencies
 RUN set -eux; \
@@ -100,8 +98,8 @@ RUN { \
 	} > /usr/local/etc/php/conf.d/error-logging.ini
 
 RUN set -eux; \
-	version='6.2.7'; \
-	sha1='8ed5bead7b4ad55c8fedacae58d8c53a56f4f290'; \
+	version='${WP_VERSION}'; \
+	sha1='${WP_SHA}'; \
 	\
 	curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-$version.tar.gz"; \
 	echo "$sha1 *wordpress.tar.gz" | sha1sum -c -; \
@@ -140,7 +138,7 @@ RUN set -eux; \
 VOLUME /var/www/html
 
 COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/
-COPY docker-entrypoint.sh /usr/local/bin/
+COPY --chmod=+x docker-entrypoint.sh /usr/local/bin/
 # https://github.com/docker-library/wordpress/issues/969
 RUN ln -svfT docker-entrypoint.sh /usr/local/bin/docker-ensure-installed.sh
 
