@@ -2,9 +2,8 @@ name: Build and push
 
 on:
   push:
-    branches: ["dev"]
   pull_request:
-    branches: [ "main" ]
+
 
 env:
   REGISTRY: ghcr.io
@@ -57,11 +56,14 @@ jobs:
       #     cache-to: type=gha,mode=max
       
       # Build with Bake when not PR
-      - name: Build and push  with Bake
+      - name: Build and push with Bake
         id: build-and-push
         uses: docker/bake-action@v6
         with:
-          push: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request' && github.ref_name == 'main' }}
           load: true
           source: "."
           targets: "build"
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max

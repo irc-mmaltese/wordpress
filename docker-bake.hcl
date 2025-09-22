@@ -1,14 +1,14 @@
-variable "PHP" {
+variable "PHP_VER" {
   default = "8.2"
   type    = string
 }
 
-variable "WP" {
+variable "WP_VER" {
   default = "6.2.7"
   type    = string
 }
 
-variable "SHA" {
+variable "WP_HASH" {
   default = "8ed5bead7b4ad55c8fedacae58d8c53a56f4f290"
   type    = string
 }
@@ -16,16 +16,16 @@ variable "SHA" {
 target "build" {
   name = "build-${app}"
   args = {
-    PHP_VERSION = PHP
-    WP_VERSION  = WP
-    WP_SHA      = SHA
+    PHP_VERSION = PHP_VER
+    WP_VERSION  = WP_VER
+    WP_SHA      = WP_HASH
   }
   matrix = {
-    app = ["apache", "fpm", "fpm-alpine"]
+    app = ["fpm", "fpm-alpine"]
   }
   dockerfile = "${app}.Dockerfile"
-  platforms = [ "linux/amd64" ]
-  tags = ["ghcr.io/irc-mmaltese/wordpress:${WP}-php${PHP}-${app}"]
+  platforms  = [ "linux/amd64" ]
+  tags       = ["ghcr.io/irc-mmaltese/wordpress:${WP_VER}-php${PHP_VER}-${app}"]
 }
 
 // group "all" {
