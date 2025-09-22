@@ -41,7 +41,7 @@ target "fpm" {
     tags       = [ "ghcr.io/irc-mmaltese/wordpress:${WP}-php${PHP}-fpm" ]
 }
 
-target "fpm-apline" {
+target "fpm-alpine" {
     args = {
       PHP_VERSION = PHP
       WP_VERSION  = WP
