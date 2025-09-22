@@ -15,6 +15,11 @@ variable "SHA" {
 
 target "build" {
   name = "build-${app}"
+  args = {
+    PHP_VERSION = PHP
+    WP_VERSION  = WP
+    WP_SHA      = SHA
+  }
   matrix = {
     app = ["apache", "fpm", "fpm-alpine"]
   }
