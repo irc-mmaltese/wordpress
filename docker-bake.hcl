@@ -21,7 +21,7 @@ target "build" {
     WP_SHA      = WP_HASH
   }
   matrix = {
-    app = ["fpm", "fpm-alpine"]
+    app = [ "fpm-alpine" ]
   }
   dockerfile = "${app}.Dockerfile"
   platforms  = [ "linux/amd64" ]
