@@ -64,4 +64,4 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           load: true
           source: "."
-          targets: "all"
+          targets: "build"
