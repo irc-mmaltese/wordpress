@@ -1,10 +1,9 @@
-#
-# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
-#
-# PLEASE DO NOT EDIT IT DIRECTLY.
-#
+ARG PHP_VERSION
 
-FROM php:8.2-fpm
+FROM php:${PHP_VERSION}-fpm
+
+ARG WP_VERSION
+ARG WP_SHA
 
 # persistent dependencies
 RUN set -eux; \
@@ -104,11 +103,8 @@ RUN { \
 	} > /usr/local/etc/php/conf.d/error-logging.ini
 
 RUN set -eux; \
-	version='6.8.2'; \
-	sha1='03baad10b8f9a416a3e10b89010d811d9361e468'; \
-	\
-	curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-$version.tar.gz"; \
-	echo "$sha1 *wordpress.tar.gz" | sha1sum -c -; \
+	curl -o wordpress.tar.gz -fL "https://wordpress.org/wordpress-${WP_VERSION}.tar.gz"; \
+	echo "${WP_SHA} *wordpress.tar.gz" | sha1sum -c -; \
 	\
 # upstream tarballs include ./wordpress/ so this gives us /usr/src/wordpress
 	tar -xzf wordpress.tar.gz -C /usr/src/; \
@@ -144,7 +140,7 @@ RUN set -eux; \
 VOLUME /var/www/html
 
 COPY --chown=www-data:www-data wp-config-docker.php /usr/src/wordpress/
-COPY docker-entrypoint.sh /usr/local/bin/
+COPY --chmod=+x docker-entrypoint.sh /usr/local/bin/
 # https://github.com/docker-library/wordpress/issues/969
 RUN ln -svfT docker-entrypoint.sh /usr/local/bin/docker-ensure-installed.sh
 
